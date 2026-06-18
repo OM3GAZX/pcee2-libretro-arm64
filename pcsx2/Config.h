@@ -1498,7 +1498,14 @@ namespace EmuFolders
 #define CHECK_EEREC (EmuConfig.Cpu.Recompiler.EnableEE)
 #define CHECK_CACHE (EmuConfig.Cpu.Recompiler.EnableEECache)
 #define CHECK_IOPREC (EmuConfig.Cpu.Recompiler.EnableIOP)
+// Fastmem requires the recompiler's backpatching support to handle the
+// intentional page faults it generates.  On ARM64 the recompiler does not
+// exist yet, so enabling fastmem just produces unrecoverable SIGSEGVs.
+#ifdef _M_X86
 #define CHECK_FASTMEM (EmuConfig.Cpu.Recompiler.EnableEE && EmuConfig.Cpu.Recompiler.EnableFastmem)
+#else
+#define CHECK_FASTMEM false
+#endif
 #define CHECK_EXTRAMEM (memGetExtraMemMode())
 
 //------------ SPECIAL GAME FIXES!!! ---------------
